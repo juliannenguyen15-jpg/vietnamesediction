@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vietnamese pronunciation guide</title>
+<style>
+:root{--bg:#f5f7f6;--ink:#17233b;--accent:#2f7f6f;--muted:#5d6b7a}
+@media (prefers-color-scheme: dark){:root{--bg:#11181b;--ink:#e8eef0;--accent:#6fcfb9;--muted:#9fb0ba}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:44rem;margin:0 auto;padding:.9rem}
+h1{font:600 1.35rem/1.2 Charter,"Iowan Old Style",Georgia,serif;margin:0 0 .3rem}
+p{margin:.3rem 0}label{display:block;font-weight:600;margin:1rem 0 .3rem}
+textarea,select{font:inherit;width:100%;min-height:2.9rem;padding:.7rem .85rem;border:2px solid var(--ink);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{resize:vertical}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#out{margin-top:1rem}
+.row{display:flex;flex-wrap:wrap;gap:.1rem .8rem;margin:0 0 .7rem}.gap{height:.8rem}
+.syl{display:flex;flex-direction:column}
+.vi{font:1rem Charter,Georgia,serif;opacity:.75}
+.ph{font-weight:700;font-size:1.25rem;color:var(--accent)}
+.chk{text-decoration:underline dotted;text-underline-offset:4px}
+.note{font-size:.92rem;opacity:.85}.foot{font-size:.85rem;margin-top:1.2rem;opacity:.75}
+@media (min-width:600px){.wrap{padding:1.4rem}h1{font-size:1.6rem}.ph{font-size:1.4rem}select{width:auto;max-width:100%}}
+.ipa{font:.85rem/1.3 "Noto Sans","Segoe UI","Gentium Plus",system-ui,serif;color:var(--muted);letter-spacing:.02em}
+.inl{display:flex;align-items:center;gap:.5rem;font-weight:400;margin:.9rem 0 .2rem}.inl input{width:1.2rem;height:1.2rem}
+details.rules{margin:1rem 0;border:1px solid var(--muted);border-radius:8px;padding:.5rem .8rem}details.rules summary{cursor:pointer;font-weight:600}
+button.syl{background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.can .ph{border-bottom:2px solid var(--accent)}.can:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Vietnamese pronunciation guide</h1>
+<p>Paste lyrics with all accents. Read the green guide as English sounds. No IPA needed.</p>
+<label for="src">Vietnamese lyrics</label>
+<textarea id="src" rows="5" lang="vi" spellcheck="false" maxlength="6000">Con cò bay la bay lả</textarea>
+<label for="dia">Pronunciation</label>
+<select id="dia"><option value="north">Northern (Hanoi): most lyric diction</option><option value="south">Southern (Saigon): starter set</option></select>
+<label class="inl"><input type="checkbox" id="ipa"> Show IPA</label>
+<p id="south" class="note" hidden>The Southern guide only changes some consonants so far. Please check it with a Southern speaker.</p>
+<p id="ipanote" class="note" hidden>IPA is Northern only for now, so it is hidden for Southern.</p>
+<div id="out" aria-live="polite"></div>
+<p id="audiohint" class="note" hidden>Tap an underlined word to hear it.</p>
+<p id="audiomsg" class="note" role="status"></p>
+<details class="rules"><summary>How to say endings, and the IPA symbols</summary>
+<p><b>Endings are stopped, not released.</b> For -p, -t, -c, and -ch, close your lips or tongue and stop the sound without popping it out the way English does in &ldquo;cat.&rdquo; For -m, -n, -ng, and -nh, keep the sound nasal.</p>
+<p><b>IPA used (Northern):</b> &#652; as in &ldquo;cup&rdquo; (&#417;, &acirc;) &middot; &#650; for &#432; &middot; &#603; for e &middot; &#331; as &ldquo;ng&rdquo; in &ldquo;sing&rdquo; &middot; &#626; like Spanish &ldquo;&ntilde;&rdquo; (nh) &middot; d&#810; a soft, dental d (&#273;) &middot; t&#597; like &ldquo;ch&rdquo; (tr, ch) &middot; z for r, d, gi &middot; a small mark after a letter, as in k&#794;, means the ending is stopped.</p></details>
+<p class="note">A dotted underline means that spelling is a best guess and still needs review. Tones are not shown yet.</p>
+<p class="foot">&copy; 2026 Julianne Nguyen. All rights reserved. This guide collects no personal information.</p>
+</div>
+<script src="audio-words.js"></script>
+<script>
+window.OVERRIDES = {
+  // Fix one word: "chơi": "chuh-ee",
+};
+// Vietnamese (Northern) -> English-friendly respelling, based on the conventions in the "Pho Nui" score.
+// A "?" inside a rule means: not confirmed by the score, so the syllable is flagged "check".
+(function () {
+const INIT = {ngh:'ng',ng:'ng',nh:'ny',ph:'f',th:"t'",tr:'ch',ch:'ch',kh:'kh',gh:'g',gi:'z',qu:'kw',c:'k',d:'z','đ':'d',r:'z',x:'s'};
+const STEM = {a:'ah','ă':'ah','â':'uh','ơ':'uh',e:'eh','ê':'ay',i:'ee',o:'aw','ô':'oh',u:'oo','ư':'uu',
+  ai:'ah.ee',ay:'ay',ao:'ow?',au:'ow?','âu':'uh.oo','ây':'uh.ee',oi:'aw.ee?','ôi':'oh.ee','ơi':'uh.ee',ui:'oo.ee','ưi':'uu.ee?',
+  ua:'oo.uh?','uô':'oo.aw?','ưa':'uuh','ươ':'uuh','ươi':'uuh.ee','ươu':'uuh.oo?',ia:'ee.uh','iê':'ee.uh','iêu':'ee.oo',iu:'ee.oo?',eo:'eh.oo?','êu':'ay.oo?',
+  oa:'wah','oă':'wah',oe:'weh?','uê':'way',uy:'wee?','uyê':'wee.ay?','uâ':'wuh','uơ':'wuh?','ưu':'uu.oo?',oai:'wah.ee?',oay:'wah.ee?'};
+const FIN = {'':'',c:'k',ch:'k?',m:'m',n:'n',ng:'ng',nh:'ng?',p:'p',t:'t'};
+const SPECIAL = {'a+nh':'aing','a+ch':'aik','i+nh':'ing','ê+nh':'ayng?'};
+const INIT_IPA = {ngh:'ŋ',ng:'ŋ',nh:'ɲ',ph:'f',th:'tʰ?',tr:'tɕ',ch:'tɕ',kh:'x?',gh:'ɣ?',g:'ɣ?',gi:'z',qu:'kw',c:'k',k:'k',d:'z','đ':'d\u032a',r:'z',x:'s',s:'s',b:'b',h:'h',l:'l',m:'m',n:'n',p:'p',t:'t',v:'v'};
+const STEM_IPA = {a:'a','ă':'a','â':'ʌ','ơ':'ʌ',e:'ɛ','ê':'e',i:'i',o:'ɔ','ô':'o',u:'u','ư':'ʊ',
+  ai:'aj',ay:'aj','ây':'ʌj',ao:'aw',au:'aw','âu':'ʌw',oi:'ɔj?','ôi':'oj','ơi':'ʌj',ui:'uj','ưi':'ʊj?',
+  ua:'uə?','uô':'uə?','ưa':'ʊə?','ươ':'ʊə?','ươi':'ʊəj?','ươu':'ʊəw?',ia:'iə?','iê':'iə?','iêu':'iəw?',iu:'iw?',eo:'ɛw?','êu':'ew?',
+  oa:'wa','oă':'wa',oe:'wɛ?','uê':'we','uy':'wi?','uyê':'wiə?','uâ':'wʌ','uơ':'wʌ?','ưu':'ʊw?',oai:'waj?',oay:'waj?'};
+const FIN_IPA = {'':'',c:'k\u031a',ch:'k\u031a?',m:'m',n:'n',ng:'ŋ',nh:'ɲ?',p:'p\u031a',t:'t\u031a'};
+const SPECIAL_IPA = {'a+nh':'ajŋ?','a+ch':'ajk\u031a?','i+nh':'iŋ?','ê+nh':'eŋ?'};
+const V = 'aăâeêioôơuưy';
+// Southern starter set: consonant differences only. Edit here to refine.
+const SOUTH = {d:'y',gi:'y',r:'r'};
+const TONE = {'\u0301':'s','\u0300':'f','\u0309':'r','\u0303':'x','\u0323':'j'};
+function telex(w) {
+  let t = '';
+  let s = w.toLowerCase().normalize('NFD').replace(/[\u0300\u0301\u0303\u0309\u0323]/g, c => { t = TONE[c]; return ''; });
+  s = s.normalize('NFC').replace(/ă/g,'aw').replace(/â/g,'aa').replace(/ê/g,'ee').replace(/ô/g,'oo').replace(/ơ/g,'ow').replace(/ư/g,'uw').replace(/đ/g,'dd');
+  return s + t;
+}
+function syllable(w, dia) {
+  const ov = (typeof window !== 'undefined' && window.OVERRIDES || {})[w.toLowerCase()];
+  if (ov) return { r: ov, check: false, slug: telex(w) };
+  const base = w.toLowerCase().normalize('NFD').replace(/[\u0300\u0301\u0303\u0309\u0323]/g, '').normalize('NFC');
+  const m = base.match(/^(ngh|ng|nh|ph|th|tr|ch|kh|gh|gi|qu|[bcdđghklmnprstvx])?(.*)$/);
+  let ini = m[1] || '', rest = m[2];
+  if (ini === 'gi' && !new RegExp('[' + V + ']').test(rest)) { ini = 'g'; rest = 'i' + rest; }
+  const n = rest.match(new RegExp('^([' + V + ']+?)(ch|ng|nh|c|m|n|p|t)?$'));
+  if (!n) return null;
+  const nuc = n[1].replace(/^yê/, 'iê').replace(/^ya/, 'ia').replace(/^y$/, 'i'), fin = n[2] || '';
+  let st = SPECIAL[nuc + '+' + fin];
+  if (!st) { if (STEM[nuc] === undefined) return null; st = STEM[nuc] + FIN[fin]; }
+  let ini2 = INIT[ini] !== undefined ? INIT[ini] : ini, chk = false;
+  if (dia === 'south' && SOUTH[ini] !== undefined) { ini2 = SOUTH[ini]; chk = true; }
+  if (ini === 'th' && nuc === 'uơ') { ini2 = 't'; st = 'wuh'; }
+  const r = (ini2 + st).replace(/\./g, '-');
+  let ist = SPECIAL_IPA[nuc + '+' + fin], ii = INIT_IPA[ini] !== undefined ? INIT_IPA[ini] : ini;
+  if (ist === undefined && STEM_IPA[nuc] !== undefined) ist = STEM_IPA[nuc] + FIN_IPA[fin];
+  if (ini === 'th' && nuc === 'uơ') { ii = 'tʰ'; ist = 'wʌ'; }
+  const ip = ist === undefined ? '' : ii + ist;
+  return { r: r.replace(/\?/g, ''), check: chk || r.includes('?'), slug: telex(w), ipa: ip.replace(/\?/g, ''), ipaCheck: ip.includes('?') };
+}
+function convert(text, dia) {
+  return text.split('\n').map(line => (line.match(/\p{L}+|[^\p{L}]+/gu) || []).filter(t => /\p{L}/u.test(t)).map(t => {
+    const s = syllable(t, dia);
+    if (!s) return { vi: t, r: t, check: true, slug: '' };
+    const r = /^\p{Lu}/u.test(t) ? s.r[0].toUpperCase() + s.r.slice(1) : s.r;
+    return { vi: t, r, check: s.check, slug: s.slug, ipa: s.ipa, ipaCheck: s.ipaCheck };
+  }));
+}
+const api = { convert, syllable };
+if (typeof module !== 'undefined') module.exports = api; else window.VNGuide = api;
+})();
+
+(function(){
+var src=document.getElementById('src'),dia=document.getElementById('dia'),out=document.getElementById('out');
+var FILES={},au=null,amsg=document.getElementById('audiomsg');
+(window.AUDIO_WORDS||[]).forEach(function(n){FILES[n.replace(/\.[^.]+$/,'')]=n;});
+document.getElementById('audiohint').hidden=!Object.keys(FILES).length;
+function hear(n){if(au)au.pause();amsg.textContent='';au=new Audio('audio/'+n);au.onerror=function(){amsg.textContent='That recording could not be played.';};var pr=au.play();if(pr&&pr.catch)pr.catch(function(){});}
+function render(){
+  var nodes=[],showIpa=document.getElementById('ipa').checked&&dia.value==='north';
+  window.VNGuide.convert(src.value.slice(0,6000),dia.value).forEach(function(l){
+    if(!l.length){var g=document.createElement('div');g.className='gap';nodes.push(g);return;}
+    var p=document.createElement('p');p.className='row';
+    l.forEach(function(s){
+      var fl=FILES[s.slug],b=document.createElement(fl?'button':'span');b.className='syl'+(fl?' can':'');if(fl){b.type='button';b.setAttribute('aria-label','Hear '+s.vi);b.onclick=function(){hear(fl);};}
+      var v=document.createElement('span');v.className='vi';v.lang='vi';v.textContent=s.vi;
+      var c=document.createElement('span');c.className='ph'+(s.check?' chk':'');c.textContent=s.r;
+      b.appendChild(v);b.appendChild(c);
+      if(showIpa&&s.ipa){var i=document.createElement('span');i.className='ipa'+(s.ipaCheck?' chk':'');i.textContent='['+s.ipa+']';b.appendChild(i);}
+      p.appendChild(b);});
+    nodes.push(p);});
+  out.replaceChildren.apply(out,nodes);
+  document.getElementById('south').hidden=dia.value!=='south';
+  document.getElementById('ipanote').hidden=!(dia.value==='south'&&document.getElementById('ipa').checked);
+}
+document.getElementById('ipa').addEventListener('change',function(){render();});
+src.addEventListener('input',render);dia.addEventListener('change',render);render();
+})();
+</script>
+</body>
+</html>
